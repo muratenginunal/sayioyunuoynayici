@@ -77,8 +77,7 @@ void Oynatici::sayiTut()
 {
     cout << "sayiTut basladi" << endl;
 
-    auto tumOlasiliklar = vector<BasamakTipi>{};
-    tumOlasiliklar.reserve(B);
+    auto tumOlasiliklar = vector<BasamakTipi>(B);
     for (int i=0; i < B; i++)
         tumOlasiliklar[i] = i;
 
@@ -94,7 +93,7 @@ void Oynatici::sayiTut()
         for (auto a : tumOlasiliklar)
             cout << a << " ";
         cout << endl;
-        
+
         auto randRest = uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
         auto olasiSiraNo = randRest(generator);
         basamaklar[i] = tumOlasiliklar[olasiSiraNo];
