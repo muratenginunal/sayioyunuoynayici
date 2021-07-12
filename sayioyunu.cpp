@@ -100,8 +100,6 @@ void Oynatici::sayiTut()
         for(auto b: simdiyeDekCikanlar)
             std::cout << b << ", ";
 
-        assert(!std::binary_search(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]));
-
         auto itCikanlar = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]);
         simdiyeDekCikanlar.insert(itCikanlar, basamaklar[i]);
 
