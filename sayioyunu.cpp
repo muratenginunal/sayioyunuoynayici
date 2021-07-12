@@ -10,7 +10,7 @@ namespace SayiOyunu
 {
     class Oynatici
     {
-        public:
+        private:
             using TahminTipi = unsigned int;
 
             static auto tahminAl() -> TahminTipi;
@@ -20,23 +20,21 @@ namespace SayiOyunu
             static constexpr const auto B = 10; //!< Tahminin temsil edildigi sayi tabani
             static constexpr const auto N = 4;  //!< Tahminin basamak sayisi
 
-        private:
             using BasamakTipi = unsigned short;
             using BasamaklarTasiyici = std::array<BasamakTipi, N>;
+            using SonucSayisiTipi = unsigned short;
 
             static auto getBUzeriNe1() -> TahminTipi;
             static auto tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici;
 
         public:
-            using SonucSayisiTipi = unsigned short;
-
             explicit Oynatici();
-            
-            void sayiYazdir(std::ostream &output) const;
-            auto tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>;
+
+            void oyna();            
 
         private:
-
+            void sayiYazdir(std::ostream &output) const;
+            auto tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>;
             void sayiTut();
             
             BasamaklarTasiyici basamaklar;
@@ -47,24 +45,30 @@ using namespace SayiOyunu;
 
 int main()
 {
-    std::cout << "Merhaba! "<< std::endl;
     auto oynatici = Oynatici{};
-    for(Oynatici::TahminTipi tahmin = Oynatici::tahminAl(); tahmin != 0; tahmin = Oynatici::tahminAl())
-    {
-        auto [arti, eksi] = oynatici.tahminiDegerlendir(tahmin);
-        if (arti == Oynatici::N)
-            break;
-    }
-    oynatici.sayiYazdir(std::cout);
+    oynatici.oyna();
     return 0;
 }
 
 Oynatici::Oynatici()
 {
+    std::cout << "Merhaba! Sayi oyununa hosgeldiniz." << std::endl;
     std::cout << "Oynatici::N : " << N << std::endl;
     std::cout << "Oynatici::B : " << B << std::endl;
     sayiTut();
     sayiYazdir(std::cout);
+}
+
+void Oynatici::oyna()
+{
+    for(Oynatici::TahminTipi tahmin = Oynatici::tahminAl(); tahmin != 0; tahmin = Oynatici::tahminAl())
+    {
+        auto [arti, eksi] = oynatici.tahminiDegerlendir(tahmin);
+        std::cout << "+" << arti << " -" << eksi << std::endl;
+        if (arti == Oynatici::N)
+            break;
+    }
+    oynatici.sayiYazdir(std::cout);
 }
 
 void Oynatici::sayiTut()
@@ -105,11 +109,14 @@ void Oynatici::sayiYazdir(std::ostream &output) const
 auto Oynatici::tahminAl() -> TahminTipi
 {
     auto tahmin = static_cast<TahminTipi>(-1);
+    
     do
     {
         std::cout << "Programdan cikmak icin 0, rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << std::endl;
         std::cin >> tahmin;
+        std::cout << "Girilen tahmin: " << tahmin << std::endl;
     }while(!tahmin /*|| (tahminMin() < tahmin && tahmin < tahminMax()*/);
+    
     return tahmin;
 }
 
