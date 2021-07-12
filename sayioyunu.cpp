@@ -112,7 +112,22 @@ auto Oynatici::tahminAl() -> TahminTipi
 
 auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>
 {
-    return {0, 0};
+    auto arti = SonucSayisiTipi{0};
+    auto eksi = SonucSayisiTipi{0};
+    auto tahminBasamaklar = tahminiCoz(tahmin);
+    for(i=0; i<N; i++)
+    {
+        if(tahminBasamaklari[i] == basamaklar[i])
+        {
+            ++arti;
+            continue;
+        }
+
+        if(std::find(basamaklar.cbegin(), basamaklar.cend(), tahminBasamaklar[i]) != basamaklar.cend())
+            ++eksi;
+    }
+    assert(arti + eksi <= N)
+    return {arti, eksi};
 }
 
 auto Oynatici::tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici
