@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <utility>
+#include <cassert>
 
 namespace SayiOyunu
 {
@@ -20,7 +21,11 @@ namespace SayiOyunu
             static constexpr const auto N = 4;  //!< Tahminin basamak sayisi
 
         private:
+            using BasamakTipi = unsigned short;
+            using BasamaklarTasiyici = std::array<BasamakTipi, N>;
+
             static auto getBUzeriNe1() -> TahminTipi;
+            static auto tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici;
 
         public:
             using SonucSayisiTipi = unsigned short;
@@ -31,11 +36,8 @@ namespace SayiOyunu
             auto tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>;
 
         private:
-            using BasamakTipi = unsigned short;
-            using BasamaklarTasiyici = std::array<BasamakTipi, N>;
 
             void sayiTut();
-            auto tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici;
             
             BasamaklarTasiyici basamaklar;
     };
@@ -52,7 +54,7 @@ int main()
         if (arti == Oynatici::N)
             break;
     }
-    oynatici.printSayi(std::cout);
+    oynatici.sayiYazdir(std::cout);
     return 0;
 }
 
@@ -101,7 +103,7 @@ void Oynatici::printSayi(std::ostream &output) const
 
 auto Oynatici::tahminAl() -> TahminTipi
 {
-    auto tahmin = TahminTipi{-1};
+    auto tahmin = static_cast<TahminTipi>(-1);
     do
     {
         std::cout << "Programdan cikmak icin 0, rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << std::endl;
@@ -115,9 +117,9 @@ auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSay
     auto arti = SonucSayisiTipi{0};
     auto eksi = SonucSayisiTipi{0};
     auto tahminBasamaklar = tahminiCoz(tahmin);
-    for(i=0; i<N; i++)
+    for(int i=0; i<N; i++)
     {
-        if(tahminBasamaklari[i] == basamaklar[i])
+        if(tahminBasamaklar[i] == basamaklar[i])
         {
             ++arti;
             continue;
@@ -133,13 +135,14 @@ auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSay
 auto Oynatici::tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici
 {
     auto retVal = BasamaklarTasiyici{};
-    auto bolen = Oynatici::getTabanUzeriNe1();
+    auto bolen = Oynatici::getBUzeriNe1();
     for(int i=0; i<N; i++)
     {
         retVal[i] = tahmin / bolen;
         tahmin -= retVal[i] * bolen;
         bolen /= B;
     }
+    return retVal;
 }
 
 auto Oynatici::getBUzeriNe1() -> TahminTipi
