@@ -76,7 +76,7 @@ void Oynatici::sayiTut()
 
     for (int i = 1; i < N; i++)
     {        
-        auto randRest = std::uniform_int_distribution<BasamakTipi>{0, B - 1 - i};
+        auto randRest = std::uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
         auto olasiSiraNo = randRest(generator);
 
         auto itOlasi = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), olasiSiraNo);
@@ -93,7 +93,7 @@ void Oynatici::sayiTut()
     }
 }
 
-void Oynatici::printSayi(std::ostream &output) const
+void Oynatici::sayiYazdir(std::ostream &output) const
 {
     for(auto basamak: basamaklar)
         output << basamak;
@@ -128,7 +128,7 @@ auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSay
         if(std::find(basamaklar.cbegin(), basamaklar.cend(), tahminBasamaklar[i]) != basamaklar.cend())
             ++eksi;
     }
-    assert(arti + eksi <= N)
+    assert(arti + eksi <= N);
     return {arti, eksi};
 }
 
