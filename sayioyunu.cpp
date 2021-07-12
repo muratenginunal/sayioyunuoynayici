@@ -88,7 +88,6 @@ void Oynatici::sayiTut()
     basamaklar[0] = randBe1(generator);
     cout << "raslantisal sayi uretildi: " << basamaklar[0] << endl;
     tumOlasiliklar.erase(remove(tumOlasiliklar.begin(), tumOlasiliklar.end(), basamaklar[0]), tumOlasiliklar.end());
-    assert(nRemoved == 1);
     for (int i = 1; i < N; i++)
     {        
         cout << "i: " << i;
@@ -96,7 +95,6 @@ void Oynatici::sayiTut()
         auto olasiSiraNo = randRest(generator);
         basamaklar[i] = tumOlasiliklar[olasiSiraNo];
         tumOlasiliklar.erase(remove(tumOlasiliklar.begin(), tumOlasiliklar.end(), basamaklar[i]), tumOlasiliklar.end());
-        assert(nRemoved == 1);
     }
 }
 
