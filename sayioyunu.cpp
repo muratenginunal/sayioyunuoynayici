@@ -74,7 +74,7 @@ void Oynatici::sayiTut()
     auto randBe1 = std::uniform_int_distribution<BasamakTipi>{1, B - 1};
     std::cout << "raslantisal sayi ureticileri olusturuldu" << std::endl;
     basamaklar[0] = randBe1(generator);
-    std::cout << "raslantisal sayi uretildi" << std::endl;
+    std::cout << "raslantisal sayi uretildi: " << basamaklar[0] << std::endl;
 
     auto simdiyeDekCikanlar = std::vector<BasamakTipi>{};
     simdiyeDekCikanlar.reserve(N);
