@@ -79,6 +79,7 @@ void Oynatici::sayiTut()
     auto simdiyeDekCikanlar = std::vector<BasamakTipi>{};
     simdiyeDekCikanlar.reserve(N);
     simdiyeDekCikanlar.push_back(basamaklar[0]);
+    std::cout << "dongu oncesi, simdiyeDekCikanlar.size(): " << simdiyeDekCikanlar.size() << std::endl;
 
     for (int i = 1; i < N; i++)
     {        
