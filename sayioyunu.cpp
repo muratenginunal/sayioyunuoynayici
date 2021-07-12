@@ -70,40 +70,27 @@ Oynatici::Oynatici()
 void Oynatici::sayiTut()
 {
     std::cout << "sayiTut basladi" << std::endl;
+
+    auto tumOlasiliklar = std::vector<BasamakTipi>{};
+    tumOlasiliklar.reserve(B);
+    for (int i=0; i < B; i++)
+        tumOlasiliklar[i] = i;
+
     auto generator = std::mt19937{0};
     auto randBe1 = std::uniform_int_distribution<BasamakTipi>{1, B - 1};
     std::cout << "raslantisal sayi ureticileri olusturuldu" << std::endl;
     basamaklar[0] = randBe1(generator);
     std::cout << "raslantisal sayi uretildi: " << basamaklar[0] << std::endl;
-
-    auto simdiyeDekCikanlar = std::vector<BasamakTipi>{};
-    simdiyeDekCikanlar.reserve(N);
-    simdiyeDekCikanlar.push_back(basamaklar[0]);
-    std::cout << "dongu oncesi, simdiyeDekCikanlar.size(): " << simdiyeDekCikanlar.size() << std::endl;
-
+    auto nRemoved = std::erase(tumOlasiliklar, basamaklar[0]);
+    assert(nRemoved == 1);
     for (int i = 1; i < N; i++)
     {        
         std::cout << "i: " << i;
         auto randRest = std::uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
         auto olasiSiraNo = randRest(generator);
-
-        auto itOlasi = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), olasiSiraNo);
-        
-        auto bundanOnceCikmisSayisi = itOlasi - simdiyeDekCikanlar.cbegin();
-
-        basamaklar[i] = olasiSiraNo + bundanOnceCikmisSayisi;
-        
-        assert(basamaklar[i] < B);
-        
-        std::cout << ", olasiSiraNo: " << olasiSiraNo << " simdiyeDekCikanlar:";
-        
-        for(auto b: simdiyeDekCikanlar)
-            std::cout << b << ", ";
-
-        auto itCikanlar = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]);
-        simdiyeDekCikanlar.insert(itCikanlar, basamaklar[i]);
-
-        assert(std::is_sorted(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend()));
+        basamaklar[i] = tumOlasiliklar[olasiSiraNo];
+        auto nRemoved = std::erase(tumOlasiliklar, basamaklar[i]);
+        assert(nRemoved == 1);
     }
 }
 
