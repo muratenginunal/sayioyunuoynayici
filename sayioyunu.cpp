@@ -51,6 +51,7 @@ int main()
 }
 
 using namespace std;
+
 Oynatici::Oynatici()
 {
     cout << "Merhaba! Sayi oyununa hosgeldiniz." << endl;
@@ -62,44 +63,44 @@ Oynatici::Oynatici()
 
 void Oynatici::oyna()
 {
-    for(Oynatici::TahminTipi tahmin = Oynatici::tahminAl(); tahmin != 0; tahmin = Oynatici::tahminAl())
+    for(TahminTipi tahmin = tahminAl(); tahmin != 0; tahmin = tahminAl())
     {
-        auto [arti, eksi] = oynatici.tahminiDegerlendir(tahmin);
+        auto [arti, eksi] = tahminiDegerlendir(tahmin);
         cout << "+" << arti << " -" << eksi << endl;
-        if (arti == Oynatici::N)
+        if (arti == N)
             break;
     }
-    oynatici.sayiYazdir(cout);
+    sayiYazdir(cout);
 }
 
 void Oynatici::sayiTut()
 {
     cout << "sayiTut basladi" << endl;
 
-    auto tumOlasiliklar = std::vector<BasamakTipi>{};
+    auto tumOlasiliklar = vector<BasamakTipi>{};
     tumOlasiliklar.reserve(B);
     for (int i=0; i < B; i++)
         tumOlasiliklar[i] = i;
 
-    auto generator = std::mt19937{0};
-    auto randBe1 = std::uniform_int_distribution<BasamakTipi>{1, B - 1};
+    auto generator = mt19937{0};
+    auto randBe1 = uniform_int_distribution<BasamakTipi>{1, B - 1};
     cout << "raslantisal sayi ureticileri olusturuldu" << endl;
     basamaklar[0] = randBe1(generator);
     cout << "raslantisal sayi uretildi: " << basamaklar[0] << endl;
-    auto nRemoved = erase(tumOlasiliklar, basamaklar[0]);
+    tumOlasiliklar.erase(remove(tumOlasiliklar.begin(), tumOlasiliklar.end(), basamaklar[0]), tumOlasiliklar.end());
     assert(nRemoved == 1);
     for (int i = 1; i < N; i++)
     {        
         cout << "i: " << i;
-        auto randRest = std::uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
+        auto randRest = uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
         auto olasiSiraNo = randRest(generator);
         basamaklar[i] = tumOlasiliklar[olasiSiraNo];
-        auto nRemoved = erase(tumOlasiliklar, basamaklar[i]);
+        tumOlasiliklar.erase(remove(tumOlasiliklar.begin(), tumOlasiliklar.end(), basamaklar[i]), tumOlasiliklar.end());
         assert(nRemoved == 1);
     }
 }
 
-void Oynatici::sayiYazdir(std::ostream &output) const
+void Oynatici::sayiYazdir(ostream &output) const
 {
     for(auto basamak: basamaklar)
         output << basamak;
@@ -121,7 +122,7 @@ auto Oynatici::tahminAl() -> TahminTipi
     return tahmin;
 }
 
-auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>
+auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> pair<SonucSayisiTipi, SonucSayisiTipi>
 {
     auto arti = SonucSayisiTipi{0};
     auto eksi = SonucSayisiTipi{0};
@@ -134,7 +135,7 @@ auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSay
             continue;
         }
 
-        if(std::find(basamaklar.cbegin(), basamaklar.cend(), tahminBasamaklar[i]) != basamaklar.cend())
+        if(find(basamaklar.cbegin(), basamaklar.cend(), tahminBasamaklar[i]) != basamaklar.cend())
             ++eksi;
     }
     assert(arti + eksi <= N);
