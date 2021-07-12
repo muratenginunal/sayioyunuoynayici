@@ -118,13 +118,20 @@ auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSay
 auto Oynatici::tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici
 {
     auto retVal = BasamaklarTasiyici{};
-    auto ilkBolen = Oynatici::getTabanUzeriNe1();
+    auto bolen = Oynatici::getTabanUzeriNe1();
     for(int i=0; i<N; i++)
     {
-
+        retVal[i] = tahmin / bolen;
+        tahmin -= retVal[i] * bolen;
+        bolen /= B;
     }
 }
+
 auto Oynatici::getBUzeriNe1() -> TahminTipi
 {
-    
+    auto retval = TahminTipi{1};
+    for(int i = 0; i < N-1; i++)
+        retval *= B;
+
+    return retval;
 }
