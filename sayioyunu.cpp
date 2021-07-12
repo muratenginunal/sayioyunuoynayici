@@ -61,6 +61,7 @@ int main()
 Oynatici::Oynatici()
 {
     sayiTut();
+    sayiYazdir(std::cout);
 }
 
 void Oynatici::sayiTut()
@@ -84,6 +85,9 @@ void Oynatici::sayiTut()
 
         basamaklar[i] = olasiSiraNo + (itOlasi - simdiyeDekCikanlar.cbegin());
         assert(basamaklar[i] < B);
+        std::cout << "i: " << i << ", olasiSiraNo: " << olasiSiraNo << " simdiyeDekCikanlar:";
+        for(auto b: simdiyeDekCikanlar)
+            std::cout << b << ", ";
         assert(!std::binary_search(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]));
 
         auto itCikanlar = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]);
