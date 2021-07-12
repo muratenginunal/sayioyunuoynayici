@@ -15,8 +15,12 @@ namespace SayiOyunu
             static auto tahminAl() -> TahminTipi;
             static constexpr auto tahminMax() -> TahminTipi;
             static constexpr auto tahminMin() -> TahminTipi;
+
+            static constexpr const auto B = 10; //!< Tahminin temsil edildigi sayi tabani
+            static constexpr const auto N = 4;  //!< Tahminin basamak sayisi
+
         private:
-            static constexpr const auto N = 4;
+            static auto getBUzeriNe1() -> TahminTipi;
 
         public:
             using SonucSayisiTipi = unsigned short;
@@ -24,14 +28,16 @@ namespace SayiOyunu
             explicit Oynatici();
             
             void sayiYazdir(std::ostream &output) const;
-            auto tahminiDegerlendir(TahminTipi) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>;
+            auto tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>;
 
         private:
             using BasamakTipi = unsigned short;
+            using BasamaklarTasiyici = std::array<BasamakTipi, N>;
 
             void sayiTut();
+            auto tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici;
             
-            std::array<BasamakTipi, N> sayi;
+            BasamaklarTasiyici basamaklar;
     }
 }
 
@@ -43,7 +49,7 @@ int main()
     for(Oynatici::TahminTipi tahmin = Oynatici::tahminAl(); tahmin != 0; tahmin = Oynatici::tahminAl())
     {
         auto [arti, eksi] = oynatici.tahminiDegerlendir(tahmin);
-        if (arti == 4)
+        if (arti == Oynatici::N)
             break;
     }
     oynatici.printSayi(std::cout);
@@ -58,28 +64,28 @@ Oynatici::Oynatici()
 void Oynatici::sayiTut()
 {
     auto generator = std::mt19937{0};
-    auto rand9 = std::uniform_int_distribution<BasamakTipi>{1, 9};
+    auto randBe1 = std::uniform_int_distribution<BasamakTipi>{1, B - 1};
 
-    sayi[0] = rand9(generator);
+    basamaklar[0] = randBe1(generator);
 
     auto simdiyeDekCikanlar = std::vector<BasamakTipi>{};
     simdiyeDekCikanlar.reserve(N);
-    simdiyeDekCikanlar.push_back(sayi[0]);
+    simdiyeDekCikanlar.push_back(basamaklar[0]);
 
     for (int i = 1; i < N; i++)
     {        
-        auto randRest = std::uniform_int_distribution<BasamakTipi>{0, 9 - i};
+        auto randRest = std::uniform_int_distribution<BasamakTipi>{0, B - 1 - i};
         auto olasiSiraNo = randRest(generator);
 
         auto itOlasi = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), olasiSiraNo);
         assert(itOlasi >= simdiyeDekCikanlar.cbegin());
 
-        sayi[i] = olasiSiraNo + (itOlasi - simdiyeDekCikanlar.cbegin());
-        assert(sayi[i] < 10);
-        assert(!std::binary_search(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), sayi[i]));
+        basamaklar[i] = olasiSiraNo + (itOlasi - simdiyeDekCikanlar.cbegin());
+        assert(basamaklar[i] < B);
+        assert(!std::binary_search(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]));
 
-        auto itCikanlar = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), sayi[i]);
-        simdiyeDekCikanlar.insert(itCikanlar, sayi[i]);
+        auto itCikanlar = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]);
+        simdiyeDekCikanlar.insert(itCikanlar, basamaklar[i]);
 
         assert(std::is_sorted(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend()));
     }
@@ -87,8 +93,8 @@ void Oynatici::sayiTut()
 
 void Oynatici::printSayi(std::ostream &output) const
 {
-    for(auto d: sayi)
-        output << d;
+    for(auto basamak: basamaklar)
+        output << basamak;
 
     output << std::endl; 
 }
@@ -98,8 +104,27 @@ auto Oynatici::tahminAl() -> TahminTipi
     auto tahmin = TahminTipi{-1};
     do
     {
-        std::cout << "Programdan cikmak icin 0, rakamlari birbirinden farkli " << N << " basamakli bir sayi giriniz:" << std::endl;
+        std::cout << "Programdan cikmak icin 0, rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << std::endl;
         std::cin >> tahmin;
     }while(!tahmin || (tahminMin() < tahmin && tahmin < tahminMax());
     return tahmin;
+}
+
+auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>
+{
+    return {0, 0};
+}
+
+auto Oynatici::tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici
+{
+    auto retVal = BasamaklarTasiyici{};
+    auto ilkBolen = Oynatici::getTabanUzeriNe1();
+    for(int i=0; i<N; i++)
+    {
+
+    }
+}
+auto Oynatici::getBUzeriNe1() -> TahminTipi
+{
+    
 }
