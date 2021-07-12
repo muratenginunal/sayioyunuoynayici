@@ -13,8 +13,8 @@ namespace SayiOyunu
             using TahminTipi = unsigned int;
 
             static auto tahminAl() -> TahminTipi;
-            static constexpr auto tahminMax() -> TahminTipi;
-            static constexpr auto tahminMin() -> TahminTipi;
+//            static constexpr auto tahminMax() -> TahminTipi;
+//            static constexpr auto tahminMin() -> TahminTipi;
 
             static constexpr const auto B = 10; //!< Tahminin temsil edildigi sayi tabani
             static constexpr const auto N = 4;  //!< Tahminin basamak sayisi
@@ -38,7 +38,7 @@ namespace SayiOyunu
             auto tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici;
             
             BasamaklarTasiyici basamaklar;
-    }
+    };
 }
 
 using namespace SayiOyunu;
@@ -106,7 +106,7 @@ auto Oynatici::tahminAl() -> TahminTipi
     {
         std::cout << "Programdan cikmak icin 0, rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << std::endl;
         std::cin >> tahmin;
-    }while(!tahmin || (tahminMin() < tahmin && tahmin < tahminMax());
+    }while(!tahmin /*|| (tahminMin() < tahmin && tahmin < tahminMax()*/);
     return tahmin;
 }
 
