@@ -18,7 +18,7 @@ namespace SayiOyunu
 //            static constexpr auto tahminMin() -> TahminTipi;
 
             static constexpr const auto B = 10; //!< Tahminin temsil edildigi sayi tabani
-            static constexpr const auto N = 4;  //!< Tahminin basamak sayisi
+            static constexpr const auto N = 10; //!< Tahminin basamak sayisi
 
             using BasamakTipi = unsigned short;
             using BasamaklarTasiyici = std::array<BasamakTipi, N>;
@@ -81,7 +81,8 @@ void Oynatici::sayiTut()
     for (int i=0; i < B; i++)
         tumOlasiliklar[i] = i;
 
-    auto generator = mt19937{0};
+    auto rd = random_device{};
+    auto generator = mt19937{rd()};
     auto randBe1 = uniform_int_distribution<BasamakTipi>{1, B - 1};
     cout << "raslantisal sayi ureticileri olusturuldu" << endl;
     basamaklar[0] = randBe1(generator);
