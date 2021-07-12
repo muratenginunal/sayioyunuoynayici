@@ -47,6 +47,7 @@ using namespace SayiOyunu;
 
 int main()
 {
+    std::cout << "Merhaba! "<< std::endl;
     auto oynatici = Oynatici{};
     for(Oynatici::TahminTipi tahmin = Oynatici::tahminAl(); tahmin != 0; tahmin = Oynatici::tahminAl())
     {
@@ -84,10 +85,14 @@ void Oynatici::sayiTut()
         assert(itOlasi >= simdiyeDekCikanlar.cbegin());
 
         basamaklar[i] = olasiSiraNo + (itOlasi - simdiyeDekCikanlar.cbegin());
+        
         assert(basamaklar[i] < B);
+        
         std::cout << "i: " << i << ", olasiSiraNo: " << olasiSiraNo << " simdiyeDekCikanlar:";
+        
         for(auto b: simdiyeDekCikanlar)
             std::cout << b << ", ";
+
         assert(!std::binary_search(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]));
 
         auto itCikanlar = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), basamaklar[i]);
