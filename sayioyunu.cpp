@@ -61,6 +61,7 @@ int main()
 
 Oynatici::Oynatici()
 {
+    std::cout << "Oynatici::N : " << Oynatici::N << std::endl;
     sayiTut();
     sayiYazdir(std::cout);
 }
@@ -78,17 +79,19 @@ void Oynatici::sayiTut()
 
     for (int i = 1; i < N; i++)
     {        
+        std::cout << "i: " << i;
         auto randRest = std::uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
         auto olasiSiraNo = randRest(generator);
 
         auto itOlasi = std::upper_bound(simdiyeDekCikanlar.cbegin(), simdiyeDekCikanlar.cend(), olasiSiraNo);
-        assert(itOlasi >= simdiyeDekCikanlar.cbegin());
+        
+        auto bundanOnceCikmisSayisi = itOlasi - simdiyeDekCikanlar.cbegin();
 
-        basamaklar[i] = olasiSiraNo + (itOlasi - simdiyeDekCikanlar.cbegin());
+        basamaklar[i] = olasiSiraNo + bundanOnceCikmisSayisi;
         
         assert(basamaklar[i] < B);
         
-        std::cout << "i: " << i << ", olasiSiraNo: " << olasiSiraNo << " simdiyeDekCikanlar:";
+        std::cout << ", olasiSiraNo: " << olasiSiraNo << " simdiyeDekCikanlar:";
         
         for(auto b: simdiyeDekCikanlar)
             std::cout << b << ", ";
