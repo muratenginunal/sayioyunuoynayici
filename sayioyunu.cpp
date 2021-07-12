@@ -50,13 +50,14 @@ int main()
     return 0;
 }
 
+using namespace std;
 Oynatici::Oynatici()
 {
-    std::cout << "Merhaba! Sayi oyununa hosgeldiniz." << std::endl;
-    std::cout << "Oynatici::N : " << N << std::endl;
-    std::cout << "Oynatici::B : " << B << std::endl;
+    cout << "Merhaba! Sayi oyununa hosgeldiniz." << endl;
+    cout << "Oynatici::N : " << N << endl;
+    cout << "Oynatici::B : " << B << endl;
     sayiTut();
-    sayiYazdir(std::cout);
+    sayiYazdir(cout);
 }
 
 void Oynatici::oyna()
@@ -64,16 +65,16 @@ void Oynatici::oyna()
     for(Oynatici::TahminTipi tahmin = Oynatici::tahminAl(); tahmin != 0; tahmin = Oynatici::tahminAl())
     {
         auto [arti, eksi] = oynatici.tahminiDegerlendir(tahmin);
-        std::cout << "+" << arti << " -" << eksi << std::endl;
+        cout << "+" << arti << " -" << eksi << endl;
         if (arti == Oynatici::N)
             break;
     }
-    oynatici.sayiYazdir(std::cout);
+    oynatici.sayiYazdir(cout);
 }
 
 void Oynatici::sayiTut()
 {
-    std::cout << "sayiTut basladi" << std::endl;
+    cout << "sayiTut basladi" << endl;
 
     auto tumOlasiliklar = std::vector<BasamakTipi>{};
     tumOlasiliklar.reserve(B);
@@ -82,18 +83,18 @@ void Oynatici::sayiTut()
 
     auto generator = std::mt19937{0};
     auto randBe1 = std::uniform_int_distribution<BasamakTipi>{1, B - 1};
-    std::cout << "raslantisal sayi ureticileri olusturuldu" << std::endl;
+    cout << "raslantisal sayi ureticileri olusturuldu" << endl;
     basamaklar[0] = randBe1(generator);
-    std::cout << "raslantisal sayi uretildi: " << basamaklar[0] << std::endl;
-    auto nRemoved = std::erase(tumOlasiliklar, basamaklar[0]);
+    cout << "raslantisal sayi uretildi: " << basamaklar[0] << endl;
+    auto nRemoved = erase(tumOlasiliklar, basamaklar[0]);
     assert(nRemoved == 1);
     for (int i = 1; i < N; i++)
     {        
-        std::cout << "i: " << i;
+        cout << "i: " << i;
         auto randRest = std::uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
         auto olasiSiraNo = randRest(generator);
         basamaklar[i] = tumOlasiliklar[olasiSiraNo];
-        auto nRemoved = std::erase(tumOlasiliklar, basamaklar[i]);
+        auto nRemoved = erase(tumOlasiliklar, basamaklar[i]);
         assert(nRemoved == 1);
     }
 }
@@ -103,7 +104,7 @@ void Oynatici::sayiYazdir(std::ostream &output) const
     for(auto basamak: basamaklar)
         output << basamak;
 
-    output << std::endl; 
+    output << endl; 
 }
 
 auto Oynatici::tahminAl() -> TahminTipi
@@ -112,9 +113,9 @@ auto Oynatici::tahminAl() -> TahminTipi
     
     do
     {
-        std::cout << "Programdan cikmak icin 0, rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << std::endl;
-        std::cin >> tahmin;
-        std::cout << "Girilen tahmin: " << tahmin << std::endl;
+        cout << "Programdan cikmak icin 0, rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << endl;
+        cin >> tahmin;
+        cout << "Girilen tahmin: " << tahmin << endl;
     }while(!tahmin /*|| (tahminMin() < tahmin && tahmin < tahminMax()*/);
     
     return tahmin;
