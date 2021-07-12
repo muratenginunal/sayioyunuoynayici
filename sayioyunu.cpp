@@ -61,17 +61,20 @@ int main()
 
 Oynatici::Oynatici()
 {
-    std::cout << "Oynatici::N : " << Oynatici::N << std::endl;
+    std::cout << "Oynatici::N : " << N << std::endl;
+    std::cout << "Oynatici::B : " << B << std::endl;
     sayiTut();
     sayiYazdir(std::cout);
 }
 
 void Oynatici::sayiTut()
 {
+    std::cout << "sayiTut basladi" << std::endl;
     auto generator = std::mt19937{0};
     auto randBe1 = std::uniform_int_distribution<BasamakTipi>{1, B - 1};
-
+    std::cout << "raslantisal sayi ureticileri olusturuldu" << std::endl;
     basamaklar[0] = randBe1(generator);
+    std::cout << "raslantisal sayi uretildi" << std::endl;
 
     auto simdiyeDekCikanlar = std::vector<BasamakTipi>{};
     simdiyeDekCikanlar.reserve(N);
