@@ -92,10 +92,10 @@ void Oynatici::sayiTut()
         cout << "i: " << i << " , tum olasiliklar: ";
         for (auto a : tumOlasiliklar)
             cout << a << " ";
-        cout << endl;
 
         auto randRest = uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
         auto olasiSiraNo = randRest(generator);
+        cout << "olasiSiraNo: " << olasiSiraNo << endl;
         basamaklar[i] = tumOlasiliklar[olasiSiraNo];
         tumOlasiliklar.erase(remove(tumOlasiliklar.begin(), tumOlasiliklar.end(), basamaklar[i]), tumOlasiliklar.end());
     }
@@ -115,7 +115,7 @@ auto Oynatici::tahminAl() -> TahminTipi
     
     do
     {
-        cout << "Programdan cikmak icin 0, rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << endl;
+        cout << "Programdan cikmak icin 0, sayiyi tahmin etmek icin rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << endl;
         cin >> tahmin;
         cout << "Girilen tahmin: " << tahmin << endl;
     }while(!tahmin /*|| (tahminMin() < tahmin && tahmin < tahminMax()*/);
