@@ -106,12 +106,8 @@ auto Oynatici::tahminAl() -> TahminTipi
 {
     auto tahmin = static_cast<TahminTipi>(-1);
     
-    do
-    {
-        cout << "Programdan cikmak icin 0, sayiyi tahmin etmek icin rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << endl;
-        cin >> tahmin;
-        cout << "Girilen tahmin: " << tahmin << endl;
-    }while(!tahmin /*|| (tahminMin() < tahmin && tahmin < tahminMax()*/);
+    cout << "Programdan cikmak icin 0, sayiyi tahmin etmek icin rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << endl;
+    cin >> tahmin;
     
     return tahmin;
 }
