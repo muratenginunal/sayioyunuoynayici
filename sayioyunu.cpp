@@ -18,7 +18,7 @@ namespace SayiOyunu
 //            static constexpr auto tahminMin() -> TahminTipi;
 
             static constexpr const auto B = 10; //!< Tahminin temsil edildigi sayi tabani
-            static constexpr const auto N = 10; //!< Tahminin basamak sayisi
+            static constexpr const auto N = 4; //!< Tahminin basamak sayisi
 
             using BasamakTipi = unsigned short;
             using BasamaklarTasiyici = std::array<BasamakTipi, N>;
@@ -55,10 +55,7 @@ using namespace std;
 Oynatici::Oynatici()
 {
     cout << "Merhaba! Sayi oyununa hosgeldiniz." << endl;
-    cout << "Oynatici::N : " << N << endl;
-    cout << "Oynatici::B : " << B << endl;
     sayiTut();
-    sayiYazdir(cout);
 }
 
 void Oynatici::oyna()
@@ -68,15 +65,17 @@ void Oynatici::oyna()
         auto [arti, eksi] = tahminiDegerlendir(tahmin);
         cout << "+" << arti << " -" << eksi << endl;
         if (arti == N)
+        {
+            cout << "TEBRİKLER, BİLGİSAYARIN TUTTUĞU SAYIYI BİLDİNİZ!";
             break;
+        }
     }
+    cout << "bilgisayarın tuttuğu sayı ";
     sayiYazdir(cout);
 }
 
 void Oynatici::sayiTut()
 {
-    cout << "sayiTut basladi" << endl;
-
     auto tumOlasiliklar = vector<BasamakTipi>(B);
     for (int i=0; i < B; i++)
         tumOlasiliklar[i] = i;
@@ -84,19 +83,12 @@ void Oynatici::sayiTut()
     auto rd = random_device{};
     auto generator = mt19937{rd()};
     auto randBe1 = uniform_int_distribution<BasamakTipi>{1, B - 1};
-    cout << "raslantisal sayi ureticileri olusturuldu" << endl;
     basamaklar[0] = randBe1(generator);
-    cout << "raslantisal sayi uretildi: " << basamaklar[0] << endl;
     tumOlasiliklar.erase(remove(tumOlasiliklar.begin(), tumOlasiliklar.end(), basamaklar[0]), tumOlasiliklar.end());
     for (int i = 1; i < N; i++)
     { 
-        cout << "i: " << i << " , tum olasiliklar: ";
-        for (auto a : tumOlasiliklar)
-            cout << a << " ";
-
         auto randRest = uniform_int_distribution<BasamakTipi>{0, static_cast<BasamakTipi>(B - 1 - i)};
         auto olasiSiraNo = randRest(generator);
-        cout << "olasiSiraNo: " << olasiSiraNo << endl;
         basamaklar[i] = tumOlasiliklar[olasiSiraNo];
         tumOlasiliklar.erase(remove(tumOlasiliklar.begin(), tumOlasiliklar.end(), basamaklar[i]), tumOlasiliklar.end());
     }
