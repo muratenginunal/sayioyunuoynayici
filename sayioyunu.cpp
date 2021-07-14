@@ -8,36 +8,47 @@
 
 namespace SayiOyunu
 {
-    class Oynatici
+
+    static constexpr const auto B = 10; //!< Tahminin temsil edildigi sayi tabani
+    static constexpr const auto N = 4; //!< Tahminin basamak sayisi
+
+    using TahminTipi = unsigned int;
+    using BasamakTipi = unsigned short;
+    using BasamaklarTasiyici = std::array<BasamakTipi, N>;
+    using SonucSayisiTipi = unsigned short;
+
+    class SayiTutucu
     {
-        private:
-            using TahminTipi = unsigned int;
-
+        public:
             static auto tahminAl() -> TahminTipi;
-//            static constexpr auto tahminMax() -> TahminTipi;
-//            static constexpr auto tahminMin() -> TahminTipi;
 
-            static constexpr const auto B = 10; //!< Tahminin temsil edildigi sayi tabani
-            static constexpr const auto N = 4; //!< Tahminin basamak sayisi
-
-            using BasamakTipi = unsigned short;
-            using BasamaklarTasiyici = std::array<BasamakTipi, N>;
-            using SonucSayisiTipi = unsigned short;
-
-            static auto getBUzeriNe1() -> TahminTipi;
+        private:
             static auto tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici;
 
         public:
-            explicit Oynatici();
+            explicit SayiTutucu();
 
-            void oyna();            
-
-        private:
             void sayiYazdir(std::ostream &output) const;
-            auto tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>;
+            bool birAdim(std::ostream &output) const;
+        private:
             void sayiTut();
+            auto tahminiDegerlendir(TahminTipi tahmin) const -> std::pair<SonucSayisiTipi, SonucSayisiTipi>;
             
             BasamaklarTasiyici basamaklar;
+    };
+
+    class Oyun
+    {
+        public:
+            static auto getBUzeriNe1() -> TahminTipi;
+
+        public:
+            explicit Oyun();
+
+            void oyna();
+
+        private:
+            SayiTutucu sayiTutucu;
     };
 }
 
@@ -45,36 +56,51 @@ using namespace SayiOyunu;
 
 int main()
 {
-    auto oynatici = Oynatici{};
-    oynatici.oyna();
+    auto oyun = Oyun{};
+    oyun.oyna();
+
     return 0;
 }
 
 using namespace std;
 
-Oynatici::Oynatici()
+Oyun::Oyun()
 {
     cout << "Merhaba! Sayi oyununa hosgeldiniz." << endl;
+}
+
+void Oyun::oyna()
+{
+    auto devam = true;
+    while(devam)
+    {
+        devam = sayiTutucu.birAdim(cout);
+    }
+}
+
+SayiTutucu::SayiTutucu()
+{
     sayiTut();
 }
 
-void Oynatici::oyna()
+bool SayiTutucu::birAdim(ostream &output) const
 {
-    for(TahminTipi tahmin = tahminAl(); tahmin != 0; tahmin = tahminAl())
+    auto tahmin = tahminAl();
+    if (tahmin == 0)
+        return false;
+
+    output << char{8} << ' ' << endl;
+    auto [arti, eksi] = tahminiDegerlendir(tahmin);
+    output << "+" << arti << " -" << eksi << endl;
+    if (arti == N)
     {
-        auto [arti, eksi] = tahminiDegerlendir(tahmin);
-        cout << "+" << arti << " -" << eksi << endl;
-        if (arti == N)
-        {
-            cout << "TEBRİKLER, BİLGİSAYARIN TUTTUĞU SAYIYI BİLDİNİZ!";
-            break;
-        }
+        cout << "TEBRİKLER, BİLGİSAYARIN TUTTUĞU SAYIYI BİLDİNİZ!";
+        return false;
     }
-    cout << "bilgisayarın tuttuğu sayı ";
-    sayiYazdir(cout);
+    return true;
 }
 
-void Oynatici::sayiTut()
+void SayiTutucu::sayiTut()
 {
     auto tumOlasiliklar = vector<BasamakTipi>(B);
     for (int i=0; i < B; i++)
@@ -94,7 +120,7 @@ void Oynatici::sayiTut()
     }
 }
 
-void Oynatici::sayiYazdir(ostream &output) const
+void SayiTutucu::sayiYazdir(ostream &output) const
 {
     for(auto basamak: basamaklar)
         output << basamak;
@@ -102,22 +128,19 @@ void Oynatici::sayiYazdir(ostream &output) const
     output << endl; 
 }
 
-auto Oynatici::tahminAl() -> TahminTipi
+auto SayiTutucu::tahminAl() -> TahminTipi
 {
     auto tahmin = static_cast<TahminTipi>(-1);
-    
-    cout << "Programdan cikmak icin 0, sayiyi tahmin etmek icin rakamlari birbirinden farkli " << N << " basamakli, " << B << " tabaninda yazilmis bir sayi giriniz:" << endl;
-    cin >> tahmin;
-    
+    cin >> tahmin;    
     return tahmin;
 }
 
-auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> pair<SonucSayisiTipi, SonucSayisiTipi>
+auto SayiTutucu::tahminiDegerlendir(TahminTipi tahmin) const -> pair<SonucSayisiTipi, SonucSayisiTipi>
 {
     auto arti = SonucSayisiTipi{0};
     auto eksi = SonucSayisiTipi{0};
     auto tahminBasamaklar = tahminiCoz(tahmin);
-    for(int i=0; i<N; i++)
+    for(int i=0; i < N; i++)
     {
         if(tahminBasamaklar[i] == basamaklar[i])
         {
@@ -132,11 +155,11 @@ auto Oynatici::tahminiDegerlendir(TahminTipi tahmin) const -> pair<SonucSayisiTi
     return {arti, eksi};
 }
 
-auto Oynatici::tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici
+auto SayiTutucu::tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici
 {
     auto retVal = BasamaklarTasiyici{};
-    auto bolen = Oynatici::getBUzeriNe1();
-    for(int i=0; i<N; i++)
+    auto bolen = Oyun::getBUzeriNe1();
+    for(int i=0; i< N; i++)
     {
         retVal[i] = tahmin / bolen;
         tahmin -= retVal[i] * bolen;
@@ -145,10 +168,10 @@ auto Oynatici::tahminiCoz(TahminTipi tahmin) -> BasamaklarTasiyici
     return retVal;
 }
 
-auto Oynatici::getBUzeriNe1() -> TahminTipi
+auto Oyun::getBUzeriNe1() -> TahminTipi
 {
     auto retval = TahminTipi{1};
-    for(int i = 0; i < N-1; i++)
+    for(int i = 0; i < N - 1; i++)
         retval *= B;
 
     return retval;
